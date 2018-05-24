@@ -1,6 +1,8 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using UnityEngine;
 using Random = UnityEngine.Random;
 using Array = System.Array;
@@ -321,4 +323,44 @@ public class TapCodeScript : MonoBehaviour {
         var logData = string.Format(log, args);
         Debug.LogFormat("[Tap Code #{0}] {1}", _moduleId, logData);
     }
+
+#pragma warning disable 414
+	private string TwitchHelpMessage = "Listen to the taps with !{0} listen.  Tap your answer with !{0} tap 24 32 11 22 15";
+#pragma warning restore 414
+
+	private IEnumerator ProcessTwitchCommand(string command)
+	{
+		if (!Regex.IsMatch(command, "^(?:(?:listen|play)|(?:tap |submit |press |)(?:[1-5][ ,;]*){10})$", RegexOptions.CultureInvariant | RegexOptions.IgnoreCase)) yield break;
+		DebugLog("Command is: ", command);
+		command = command.ToLowerInvariant();
+
+		yield return null;
+		if (command == "listen" || command == "play")
+		{
+			StartCoroutine(PlayWord());
+			yield return null;
+			yield break;
+		}
+
+		foreach (char tap in command)
+		{
+			int taps;
+			if (!int.TryParse(tap.ToString(), out taps)) continue;
+			for (int i = 0; i < taps; i++)
+			{
+				yield return button;
+				yield return new WaitForSeconds(0.05f);
+				yield return button;
+				yield return new WaitForSeconds(0.05f);
+			}
+
+			yield return new WaitUntil(() => paused);
+			yield return new WaitForSeconds(0.1f);
+		}
+
+		button.OnInteract();
+		yield return new WaitForSeconds(0.1f);
+		button.OnInteractEnded();
+
+	}
 }
