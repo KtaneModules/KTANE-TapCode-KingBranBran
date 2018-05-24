@@ -23,6 +23,7 @@ public class TapCodeScript : MonoBehaviour {
     string chosenWord;
     string editedWord;
     string newWord;
+	bool activated;
     bool playCoro;
     bool paused;
     bool holding;
@@ -77,7 +78,7 @@ public class TapCodeScript : MonoBehaviour {
         editedWord = FindEditedWord(newWord);
         DebugLog("Correct word: {0} => {1}", newWord.ToUpperInvariant(), editedWord.ToUpperInvariant());
 
-        
+	    activated = true;
     }
 
     private string SelectWord()
@@ -166,13 +167,23 @@ public class TapCodeScript : MonoBehaviour {
 
     private void ButtonPressed()
     {
-        if (playCoro || modulepass) return;
+	    if (releaseCoroutine != null)
+	    {
+		    StopCoroutine(releaseCoroutine);
+	    }
+
+		if (playCoro || modulepass) return;
+	    if (!activated)
+	    {
+		    return;
+	    }
         holding = true;
         StartCoroutine(StartButtonHoldTimer());
     }
 
     private void ButtonReleased()
     {
+	    if (!holding || !activated) return;
         if (modulepass) return;
         holding = false;
         if (playCoro) return;
@@ -192,11 +203,6 @@ public class TapCodeScript : MonoBehaviour {
             paused = false;
         }
         pressCount++;
-        
-        if (releaseCoroutine != null)
-        {
-            StopCoroutine(releaseCoroutine);
-        }
 
         releaseCoroutine = StartCoroutine(StartButtonReleaseTimer());
     }
@@ -335,15 +341,30 @@ public class TapCodeScript : MonoBehaviour {
 		command = command.ToLowerInvariant();
 
 		yield return null;
+
+		while (playCoro)
+		{
+			yield return "trycancel";
+		}
+
 		if (command == "listen" || command == "play")
 		{
-			StartCoroutine(PlayWord());
-			yield return null;
+			yield return button;
+			yield return new WaitUntil(() => playCoro);
+			yield return new WaitForSeconds(0.1f);
+			yield return button;
+			while (playCoro)
+			{
+				yield return "trywaitcancel 0.1";
+			}
 			yield break;
 		}
 
+		ResetEntry();
 		foreach (char tap in command)
 		{
+			yield return "trycancel";
+
 			int taps;
 			if (!int.TryParse(tap.ToString(), out taps)) continue;
 			for (int i = 0; i < taps; i++)
@@ -352,15 +373,18 @@ public class TapCodeScript : MonoBehaviour {
 				yield return new WaitForSeconds(0.05f);
 				yield return button;
 				yield return new WaitForSeconds(0.05f);
+				yield return "trycancel";
 			}
 
 			yield return new WaitUntil(() => paused);
 			yield return new WaitForSeconds(0.1f);
 		}
 
-		button.OnInteract();
-		yield return new WaitForSeconds(0.1f);
-		button.OnInteractEnded();
+		yield return "trycancel";
+		yield return button;
+		yield return new WaitForSeconds(0.05f);
+		yield return button;
+		yield return new WaitForSeconds(0.05f);
 
 	}
 }
