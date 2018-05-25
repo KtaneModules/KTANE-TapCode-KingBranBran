@@ -13,7 +13,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: tapCode
   title: Tap Code
-  description: Using tap code, try to solve this module!
+  description: Using your ears and tap code, try to solve this blank module!
   version: 1
   outputFolder: C:\Users\kingb\Desktop\KTANE Stuffs\AssetBundles
   previewImage: {fileID: 2800000, guid: d7da287cff52287429d788ccca497305, type: 3}

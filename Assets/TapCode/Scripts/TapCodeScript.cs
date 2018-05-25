@@ -27,6 +27,7 @@ public class TapCodeScript : MonoBehaviour {
     bool playCoro;
     bool paused;
     bool holding;
+    bool heldPassed;
     bool modulepass = false;
     int pressCount = -1;
     int stage = 0;
@@ -45,7 +46,7 @@ public class TapCodeScript : MonoBehaviour {
                                   "sheet", "aware", "shell", "jolly", "giant", "vague", "image", "acute", "arena", "visit",
                                   "table", "force", "chair", "quick", "suite", "large", "chord", "power", "aloof", "attic",
                                   "cover", "prize", "trail", "cycle", "sight", "zeros", "glare", "angle", "ranch", "upset",
-                                  "mixer", "drive", "xenon", "water", "judge", "right", "sweet", "gloom", "clash", "abbey",
+                                  "mixer", "drive", "xenon", "water", "venom", "right", "sweet", "gloom", "clash", "abbey",
                                   "level", "quilt", "climb", "tease", "knock", "fairy", "queen", "zebra", "guide", "south",
                                   "funny", "proud", "young", "jumpy", "staff", "query", "trunk", "zooms", "smart", "ghost",
                                   "judge", "yield", "brain", "helix", "small", "noise", "seize", "robot", "stain", "where",
@@ -184,6 +185,12 @@ public class TapCodeScript : MonoBehaviour {
     private void ButtonReleased()
     {
 	    if (!holding || !activated) return;
+        if (heldPassed)
+        {
+            heldPassed = false;
+            return;
+        }
+            
         if (modulepass) return;
         holding = false;
         if (playCoro) return;
@@ -304,6 +311,7 @@ public class TapCodeScript : MonoBehaviour {
             yield return new WaitForSeconds(.5f);
             
         }
+        if (holding) heldPassed = true;
         playCoro = false;
     }
 
