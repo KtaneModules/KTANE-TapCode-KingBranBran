@@ -61,6 +61,7 @@ GameObject:
   - component: {fileID: 23186341586445920}
   - component: {fileID: 114755362080565262}
   - component: {fileID: 65154210469447374}
+  - component: {fileID: 114199785718452518}
   m_Layer: 0
   m_Name: Sel
   m_TagString: Untagged
@@ -79,6 +80,7 @@ GameObject:
   - component: {fileID: 33275508191406322}
   - component: {fileID: 23901153876418732}
   - component: {fileID: 114853487537087822}
+  - component: {fileID: 114114995110027762}
   m_Layer: 0
   m_Name: HL
   m_TagString: Untagged
@@ -355,6 +357,32 @@ MonoBehaviour:
   m_Script: {fileID: 2144496390, guid: 45b809be76fd7a3468b6f517bced6f28, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &114114995110027762
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1330136526151120}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1005838349, guid: 45b809be76fd7a3468b6f517bced6f28, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ShaderNames:
+  - Standard
+--- !u!114 &114199785718452518
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1080808622061058}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1005838349, guid: 45b809be76fd7a3468b6f517bced6f28, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ShaderNames:
+  - Standard
 --- !u!114 &114320645222073120
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -428,7 +456,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ShaderNames:
-  - Mobile/Diffuse
+  - KT/Mobile/DiffuseTint
 --- !u!114 &114755362080565262
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -476,10 +504,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d8ef9bae02971e04782b8d649a14493a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Module: {fileID: 114325228814580446}
-  BombInfo: {fileID: 114058383470272074}
-  Audio: {fileID: 114470496129086472}
-  Sel: {fileID: 114755362080565262}
+  Module: {fileID: 0}
+  BombInfo: {fileID: 0}
+  Audio: {fileID: 0}
+  Sel: {fileID: 0}
 --- !u!114 &114970441400808602
 MonoBehaviour:
   m_ObjectHideFlags: 1
