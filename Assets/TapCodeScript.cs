@@ -180,18 +180,19 @@ public class TapCodeScript : MonoBehaviour
         else
         {
             _tapCodeInput.Clear();
-            _playTapCode = StartCoroutine(PlayTapCode());
+            
         }
     }
 
     private IEnumerator Timer()
     {
         _elapsedTime = 0f;
-        while (true)
+        while (_elapsedTime < 0.5f)
         {
             yield return null;
             _elapsedTime += Time.deltaTime;
         }
+        _playTapCode = StartCoroutine(PlayTapCode());
     }
 
     private IEnumerator PlayTapCode()
@@ -229,7 +230,7 @@ public class TapCodeScript : MonoBehaviour
         {
             _moduleSolved = true;
             Module.HandlePass();
-            Debug.LogFormat("[3D Tap Code #{0}] Submitted {1}. Module solved.", _moduleId, _solutionWord);
+            Debug.LogFormat("[Tap Code #{0}] Submitted {1}. Module solved.", _moduleId, _solutionWord);
         }
         else
         {
@@ -237,7 +238,7 @@ public class TapCodeScript : MonoBehaviour
             var chunks = new List<string>();
             for (var i = 0; i < _tapCodeInput.Count; i += 2)
                 chunks.Add(_tapCodeInput.Skip(i).Take(2).Join(""));
-            Debug.LogFormat("[3D Tap Code #{0}] Inputted {1} {2}. Strike.", _moduleId, chunks.Join(" "), _tapCodeInput.Skip(2 * (_tapCodeInput.Count / 2)).Join(""));
+            Debug.LogFormat("[Tap Code #{0}] Inputted {1} {2}. Strike.", _moduleId, chunks.Join(" "), _tapCodeInput.Skip(2 * (_tapCodeInput.Count / 2)).Join(""));
         }
         _tapCodeInput.Clear();
     }
@@ -254,10 +255,11 @@ public class TapCodeScript : MonoBehaviour
         yield return null;
         if (m.Groups["L"].Success)
         {
-            Sel.OnInteract();
-            yield return new WaitForSeconds(0.7f);
-            Sel.OnInteractEnded();
-            yield return new WaitForSeconds(0.1f);
+            //Sel.OnInteract();
+            //yield return new WaitForSeconds(0.7f);
+            //Sel.OnInteractEnded();
+            //yield return new WaitForSeconds(0.1f);
+            _playTapCode = StartCoroutine(PlayTapCode());
             yield break;
         }
 
