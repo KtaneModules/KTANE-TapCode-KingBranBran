@@ -159,13 +159,12 @@ public class TapCodeScript : MonoBehaviour
     {
         if (_moduleSolved)
             return;
-
         if (_timer != null)
             StopCoroutine(_timer);
-        if (_playTapCode != null)
-            StopCoroutine(_playTapCode);
         if (_elapsedTime < 0.5f)
         {
+            if (_playTapCode != null)
+                StopCoroutine(_playTapCode);
             if (_tapCodeActive)
                 _tapCodeInput[_tapCodeInput.Count - 1]++;
             else
@@ -178,10 +177,7 @@ public class TapCodeScript : MonoBehaviour
             _waitingToInput = StartCoroutine(acknowledgeTapCode());
         }
         else
-        {
             _tapCodeInput.Clear();
-            
-        }
     }
 
     private IEnumerator Timer()
@@ -255,11 +251,10 @@ public class TapCodeScript : MonoBehaviour
         yield return null;
         if (m.Groups["L"].Success)
         {
-            //Sel.OnInteract();
-            //yield return new WaitForSeconds(0.7f);
-            //Sel.OnInteractEnded();
-            //yield return new WaitForSeconds(0.1f);
-            _playTapCode = StartCoroutine(PlayTapCode());
+            Sel.OnInteract();
+            yield return new WaitForSeconds(0.7f);
+            Sel.OnInteractEnded();
+            yield return new WaitForSeconds(0.1f);
             yield break;
         }
 
