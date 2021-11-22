@@ -244,7 +244,7 @@ public class TapCodeScript : MonoBehaviour
     }
 
 #pragma warning disable 414
-    private string TwitchHelpMessage = "!{0} tap 123 123 123 123 123 | !{0} listen";
+    private string TwitchHelpMessage = "!{0} tap 11 22 33 44 55 | !{0} listen";
 #pragma warning restore 414
 
     private IEnumerator ProcessTwitchCommand(string command)
