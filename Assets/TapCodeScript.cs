@@ -60,6 +60,7 @@ public class TapCodeScript : MonoBehaviour
     private Coroutine _timer;
     private float _elapsedTime;
     private Coroutine _playTapCode;
+    private bool _finalTap;
 
     private void Start()
     {
@@ -163,6 +164,11 @@ public class TapCodeScript : MonoBehaviour
             StopCoroutine(_timer);
         if (_elapsedTime < 0.5f)
         {
+            if (_finalTap)
+            {
+                interpretTapCode();
+                return;
+            }
             if (_playTapCode != null)
                 StopCoroutine(_playTapCode);
             if (_tapCodeActive)
@@ -177,7 +183,10 @@ public class TapCodeScript : MonoBehaviour
             _waitingToInput = StartCoroutine(acknowledgeTapCode());
         }
         else
+        {
+            _finalTap = false;
             _tapCodeInput.Clear();
+        }
     }
 
     private IEnumerator Timer()
@@ -211,7 +220,8 @@ public class TapCodeScript : MonoBehaviour
         _tapCodeActive = false;
         if (_tapCodeInput.Count < 10)
             yield break;
-        interpretTapCode();
+        _finalTap = true;
+        //interpretTapCode();
     }
 
     private void interpretTapCode()
@@ -236,6 +246,7 @@ public class TapCodeScript : MonoBehaviour
                 chunks.Add(_tapCodeInput.Skip(i).Take(2).Join(""));
             Debug.LogFormat("[Tap Code #{0}] Inputted {1} {2}. Strike.", _moduleId, chunks.Join(" "), _tapCodeInput.Skip(2 * (_tapCodeInput.Count / 2)).Join(""));
         }
+        _finalTap = false;
         _tapCodeInput.Clear();
     }
 
@@ -272,11 +283,15 @@ public class TapCodeScript : MonoBehaviour
                 yield return new WaitForSeconds(0.05f);
                 yield return "trycancel";
             }
-
             while (_tapCodeActive)
                 yield return "trycancel";
             yield return new WaitForSeconds(0.1f);
         }
+        yield return new WaitForSeconds(0.05f);
+        Sel.OnInteract();
+        yield return new WaitForSeconds(0.05f);
+        Sel.OnInteractEnded();
+        yield return new WaitForSeconds(0.05f);
     }
 
     private IEnumerator TwitchHandleForcedSolve()
@@ -314,6 +329,11 @@ public class TapCodeScript : MonoBehaviour
             while (_tapCodeActive)
                 yield return true;
         }
+        yield return new WaitForSeconds(0.1f);
+        Sel.OnInteract();
+        yield return new WaitForSeconds(0.1f);
+        Sel.OnInteractEnded();
+        yield return new WaitForSeconds(0.1f);
         while (!_moduleSolved)
             yield return true;
     }
