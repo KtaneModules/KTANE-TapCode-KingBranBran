@@ -51,8 +51,8 @@ public class TapCodeScript : MonoBehaviour
     private int X;
     private int Y;
 
-    private List<int> _chosenTapCode =  new List<int>();
-    private List<int> _solutionTapCode =  new List<int>();
+    private List<int> _chosenTapCode = new List<int>();
+    private List<int> _solutionTapCode = new List<int>();
     private List<int> _tapCodeInput = new List<int>();
 
     private bool _tapCodeActive;
@@ -81,9 +81,9 @@ public class TapCodeScript : MonoBehaviour
         X = wordIx % 10;
         Y = wordIx / 10;
 
-        if (SerialNumber[0] - '0' >= 0 && SerialNumber[0] - '9' <= 9)
+        if (SerialNumber[0] >= '0' && SerialNumber[0] <= '9')
         {
-            if (SerialNumber[1] - '0' >= 0 && SerialNumber[1] - '9' <= 9)
+            if (SerialNumber[1] >= '0' && SerialNumber[1] <= '9')
             {
                 Debug.LogFormat("[Tap Code #{0}] Serial Number's first two characters are NUMBER NUMBER. Moving down.", _moduleId);
                 Y = (Y + movementIx) % 10;
@@ -96,7 +96,7 @@ public class TapCodeScript : MonoBehaviour
         }
         else
         {
-            if (SerialNumber[1] - '0' >= 0 && SerialNumber[1] - '9' <= 9)
+            if (SerialNumber[1] >= '0' && SerialNumber[1] <= '9')
             {
                 Debug.LogFormat("[Tap Code #{0}] Serial Number's first two characters are LETTER NUMBER. Moving left.", _moduleId);
                 X = (X - movementIx + 10) % 10;
