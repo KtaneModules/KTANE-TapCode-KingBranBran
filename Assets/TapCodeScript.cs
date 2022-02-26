@@ -69,12 +69,17 @@ public class TapCodeScript : MonoBehaviour
         Sel.OnInteractEnded += SelRelease;
 
         var SerialNumber = BombInfo.GetSerialNumber();
-        var movementIx = SerialNumber[5] - '0';
-        if (movementIx == 0)
+        int movementIx = 0;
+        if (SerialNumber.Contains('0'))
+        {
             for (int i = 0; i < 6; i++)
                 if (SerialNumber[i] - '0' >= 0 && SerialNumber[i] - '0' <= 9)
                     movementIx += SerialNumber[i] - '0';
-        Debug.LogFormat("[Tap Code #{0}] Serial number digit: {1}", _moduleId, movementIx);
+        }
+        else
+            movementIx = SerialNumber[5] - '0';
+        movementIx = movementIx % 10;
+        Debug.LogFormat("[Tap Code #{0}] Movement index: {1}", _moduleId, movementIx);
 
         var wordIx = Rnd.Range(0, 100);
         _chosenWord = _wordList[wordIx];
@@ -100,15 +105,14 @@ public class TapCodeScript : MonoBehaviour
             if (SerialNumber[1] >= '0' && SerialNumber[1] <= '9')
             {
                 Debug.LogFormat("[Tap Code #{0}] Serial Number's first two characters are LETTER NUMBER. Moving left.", _moduleId);
-                X = (X - movementIx + 10) % 10;
+                X = (X + (10 - movementIx)) % 10;
             }
             else
             {
                 Debug.LogFormat("[Tap Code #{0}] Serial Number's first two characters are LETTER LETTER. Moving up.", _moduleId);
-                Y = (Y - movementIx + 10) % 10;
+                Y = (Y + (10 - movementIx)) % 10;
             }
         }
-
         _solutionWord = _wordList[Y * 10 + X];
 
         var chosenConverted = _convertedWordList[Array.IndexOf(_wordList, _chosenWord)].ToUpperInvariant();
